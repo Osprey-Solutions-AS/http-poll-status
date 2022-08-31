@@ -67,7 +67,7 @@ const request = async({ method, instanceConfig, data, files, file, actions, igno
 
     const response = await instance.request(requestData)
 
-    return JSON.stringify(response.data)
+    return response.data
   } catch (error) {
     if ((typeof error === 'object') && (error.isAxiosError === true)) {
       const { name, message, code, response } = error

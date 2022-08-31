@@ -89,11 +89,11 @@ const check = async function(i) {
 }
 
 const main = async function() {
-  try {
     await check(1)
-  } catch(error) {
-    actions.setFailed({ message: `Polling failed: ${error.message}`, data: dataJson, files: filesJson })
-  }
 }
 
-main()
+try {
+  main()
+} catch(error) {
+  actions.setFailed({ message: `Polling failed: ${error.message}`, data: dataJson, files: filesJson })
+}

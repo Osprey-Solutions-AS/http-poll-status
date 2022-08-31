@@ -2274,7 +2274,7 @@ const request = async({ method, instanceConfig, data, files, file, actions, igno
 
     const response = await instance.request(requestData)
 
-    return JSON.stringify(response.data)
+    return response.data
   } catch (error) {
     if ((typeof error === 'object') && (error.isAxiosError === true)) {
       const { name, message, code, response } = error
@@ -5957,14 +5957,14 @@ const check = async function(i) {
 }
 
 const main = async function() {
-  try {
     await check(1)
-  } catch(error) {
-    actions.setFailed({ message: `Polling failed: ${error.message}`, data: dataJson, files: filesJson })
-  }
 }
 
-main()
+try {
+  main()
+} catch(error) {
+  actions.setFailed({ message: `Polling failed: ${error.message}`, data: dataJson, files: filesJson })
+}
 
 /***/ }),
 
