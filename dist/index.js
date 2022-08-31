@@ -5953,7 +5953,7 @@ const check = async function(i) {
     }
     await timeout(retryTimeout * 1000)
 
-    return Promise.resolve(check(i+1)).catch(error => actions.setFailed({ message: `Polling failed: ${error.message}`, data: dataJson, files: filesJson }))
+    return Promise.resolve(check(i+1)).catch(error => actions.setFailed({ message: `Polling failed: ${error.message}`}))
   })
 }
 
