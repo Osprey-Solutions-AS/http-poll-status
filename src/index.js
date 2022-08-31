@@ -62,6 +62,8 @@ if (typeof ignoreStatusCodes === 'string' && ignoreStatusCodes.length > 0) {
   ignoredCodes = ignoreStatusCodes.split(',').map(statusCode => parseInt(statusCode.trim()))
 }
 
+const client = axios.create(instanceConfig)
+
 const timeout = async function(timeout) {
   return new Promise((resolve) => {
       setTimeout(() => resolve(1), timeout)
@@ -70,7 +72,7 @@ const timeout = async function(timeout) {
 
 const check = async function(i) {
   return new Promise(async (resolve, reject) => {
-    const response = await request({ data, method, instanceConfig, preventFailureOnNoResponse, escapeData, files, file, ignoredCodes, actions: new GithubActions() })
+    const response = await client.get()
     const result = maybe(response, ...matchKey.split('.'))
     if (result == matchValue) {
       action.setOutput('result', result)
