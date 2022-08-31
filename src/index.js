@@ -12,6 +12,7 @@ let customHeaders = {}
 const retries = core.getInput('retries') || 5
 const retryTimeout = core.getInput('retry_timeout') || 5
 const matchKey = core.getInput('match_key')
+const matchValue = core.getInput('match_value')
 
 if (!!core.getInput('customHeaders')) {
   try {
@@ -71,7 +72,7 @@ const check = async function(i) {
   return new Promise(async (resolve, reject) => {
     const response = await request({ data, method, instanceConfig, preventFailureOnNoResponse, escapeData, files, file, ignoredCodes, actions: new GithubActions() })
     const result = maybe(response, matchKey.split('.'))
-    if (result) {
+    if (result == matchValue) {
       action.setOutput('result', result)
       return resolve(result)
     }
