@@ -81,7 +81,7 @@ const check = async function(i) {
       return resolve(result)
     }
     if (i >= retries) {
-      return reject('max retries')
+      return reject({message: 'max retries'})
     }
     await timeout(retryTimeout * 1000)
 
