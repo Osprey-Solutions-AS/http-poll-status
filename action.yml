@@ -4,6 +4,18 @@ inputs:
     url:
         description: 'Request URL'
         required: true
+    match_key:
+        description: 'Key of djaklf;s'
+        required: true
+    match_value:
+        description: 'Desired value'
+        required: true
+    retries:
+        description: 'Number of maximum retries'
+        required: false
+    retry_timeout:
+        description: 'Timeout between retries'
+        required: false
     method:
         description: 'Request Method'
         required: false

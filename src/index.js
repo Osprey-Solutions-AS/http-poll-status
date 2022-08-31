@@ -3,9 +3,15 @@ const axios = require('axios');
 const https = require('https');
 const { request, METHOD_POST } = require('./httpClient');
 const { GithubActions } = require('./githubActions');
+const { match, rejects } = require('assert');
+const { maybe } = require('./maybe')
 
 let auth = undefined
 let customHeaders = {}
+
+const retries = core.getInput('retries') || 5
+const retryTimeout = core.getInput('retry_timeout') || 5
+const matchKey = core.getInput('match_key')
 
 if (!!core.getInput('customHeaders')) {
   try {
@@ -55,4 +61,31 @@ if (typeof ignoreStatusCodes === 'string' && ignoreStatusCodes.length > 0) {
   ignoredCodes = ignoreStatusCodes.split(',').map(statusCode => parseInt(statusCode.trim()))
 }
 
-request({ data, method, instanceConfig, preventFailureOnNoResponse, escapeData, files, file, ignoredCodes, actions: new GithubActions() })
+const timeout = async function(timeout) {
+  return new Promise((resolve) => {
+      setTimeout(() => resolve(1), timeout)
+  })
+}
+
+const check = async function(i) {
+  return new Promise(async (resolve, reject) => {
+    const response = await request({ data, method, instanceConfig, preventFailureOnNoResponse, escapeData, files, file, ignoredCodes, actions: new GithubActions() })
+    const result = maybe(response, matchKey.split('.'))
+    if (result) {
+      action.setOutput('result', result)
+      return resolve(result)
+    }
+    if (i >= retries) {
+      return reject('max retries')
+    }
+    await timeout(retryTimeout * 1000)
+
+    return Promise.resolve(check(i+1))
+  })
+}
+
+const main = async function() {
+  await check(1)
+}
+
+main()

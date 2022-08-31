@@ -70,6 +70,8 @@ const request = async({ method, instanceConfig, data, files, file, actions, igno
     actions.setOutput('response', JSON.stringify(response.data))
     
     actions.setOutput('headers', response.headers)
+
+    return JSON.stringify(response.data)
   } catch (error) {
     if ((typeof error === 'object') && (error.isAxiosError === true)) {
       const { name, message, code, response } = error
@@ -87,6 +89,8 @@ const request = async({ method, instanceConfig, data, files, file, actions, igno
     } else {
       actions.setFailed(JSON.stringify({ message: error.message, data }));
     }
+
+    return {}
   }
 }
 
