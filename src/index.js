@@ -8,6 +8,7 @@ const { maybe } = require('./maybe')
 
 let auth = undefined
 let customHeaders = {}
+const actions = new GithubActions()
 
 const retries = core.getInput('retries') || 5
 const retryTimeout = core.getInput('retry_timeout') || 5
@@ -72,7 +73,7 @@ const timeout = async function(timeout) {
 
 const check = async function(i) {
   return new Promise(async (resolve, reject) => {
-    const response = await request({ data, method, instanceConfig, preventFailureOnNoResponse, escapeData, files, file, ignoredCodes, actions: new GithubActions() })
+    const response = await request({ data, method, instanceConfig, preventFailureOnNoResponse, escapeData, files, file, ignoredCodes, actions })
     //const response = await client.get()
     const result = maybe(response, ...matchKey.split('.'))
     if (result == matchValue) {
