@@ -85,16 +85,15 @@ const check = async function(i) {
     }
     await timeout(retryTimeout * 1000)
 
-    return Promise.resolve(check(i+1))
+    return Promise.resolve(check(i+1)).catch(error => actions.setFailed({ message: `Polling failed: ${error.message}`, data: dataJson, files: filesJson }))
   })
 }
 
 const main = async function() {
+  try {
     await check(1)
+  } catch(e) {
+  }
 }
 
-try {
-  main()
-} catch(error) {
-  actions.setFailed({ message: `Polling failed: ${error.message}`, data: dataJson, files: filesJson })
-}
+main()
