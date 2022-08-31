@@ -71,7 +71,7 @@ const timeout = async function(timeout) {
 const check = async function(i) {
   return new Promise(async (resolve, reject) => {
     const response = await request({ data, method, instanceConfig, preventFailureOnNoResponse, escapeData, files, file, ignoredCodes, actions: new GithubActions() })
-    const result = maybe(response, matchKey.split('.'))
+    const result = maybe(response, ...matchKey.split('.'))
     if (result == matchValue) {
       action.setOutput('result', result)
       return resolve(result)
