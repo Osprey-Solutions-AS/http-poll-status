@@ -5945,7 +5945,7 @@ const check = async function(i) {
     //const response = await client.get()
     const result = maybe(response, ...matchKey.split('.'))
     if (result == matchValue) {
-      action.setOutput('result', result)
+      actions.setOutput('result', result)
       return resolve(result)
     }
     if (i >= retries) {
