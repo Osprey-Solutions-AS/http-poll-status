@@ -72,7 +72,8 @@ const timeout = async function(timeout) {
 
 const check = async function(i) {
   return new Promise(async (resolve, reject) => {
-    const response = await client.get()
+    const response = await request({ data, method, instanceConfig, preventFailureOnNoResponse, escapeData, files, file, ignoredCodes, actions: new GithubActions() })
+    //const response = await client.get()
     const result = maybe(response, ...matchKey.split('.'))
     if (result == matchValue) {
       action.setOutput('result', result)
@@ -88,7 +89,11 @@ const check = async function(i) {
 }
 
 const main = async function() {
-  await check(1)
+  try {
+    await check(1)
+  } catch(error) {
+    actions.setFailed({ message: `Polling failed: ${error.message}`, data: dataJson, files: filesJson })
+  }
 }
 
 main()
